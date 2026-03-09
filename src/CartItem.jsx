@@ -8,28 +8,60 @@ const CartItem = ({ onContinueShopping }) => {
   const dispatch = useDispatch();
 
   // Calculate total amount for all products in the cart
-  const calculateTotalAmount = () => {
- 
+  const calculateTotalAmount = (cart) => {
+    // Initialize a variable total
+    let total = 0;
+    // Iterate over the cart array
+    cart.forEach((item) => {
+        //Extract quantity and cost
+        const {quantity, cost } = item;
+        //Convert "$10.00" to number and multiply
+        const priceAsNumber = parseFloat(cost.substring(1));
+        const subtotal = priceAsNumber * quantity;
+        //Add to total
+        total += subtotal;
+    });
+    //Return the final total
+    return total.toFixed(2); //Keeping it to two decimal places for currency 
   };
 
   const handleContinueShopping = (e) => {
-   
+    //Prevent default behavior (like page refresh)
+    e.preventDefault();
+    //Call the function passed down from the parent component
+    onContinueShopping(e);
   };
 
+  const handleCheckoutShopping = (e) => {
+    alert('Functionality to be added for future reference');
+  };  
 
 
   const handleIncrement = (item) => {
+    dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
   };
 
   const handleDecrement = (item) => {
-   
-  };
+    if (item.quantity > 1) {
+    dispatch(updateQuantity({ name: item.name, quantity: item.quantity 1 1 }));
+    } else {
+    //If quantity is 1, decrementing would hit 0, so remove item
+    dispatch(removeItem(item.name));
+    }
+  }
 
   const handleRemove = (item) => {
+    dispatch(removeItem(item.name));
   };
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
+    //Extract numeric value
+    const unitPrice = parseFloat(item.cost.substring(1));
+    //Multiply by quantity
+    const subtotal = unitPrice * item.quantity;
+    //Return the resulting value
+    return subtotal;
   };
 
   return (
