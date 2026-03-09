@@ -4,7 +4,8 @@ import CartItem from './CartItem';
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-
+    const calculateTotalQuantity = () => { return CartItem ?
+                    CartItem.reduce((total, item) => total + item.quantity, 0) : 0; };
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -274,7 +275,8 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
-
+                    dispatch(addItem(product));
+                    
 
                 </div>
             ) : (
