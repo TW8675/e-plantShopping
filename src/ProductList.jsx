@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import { useDispatch } from 'react-redux';
 function ProductList({ onHomeClick }) {
+    const dispatch = useDispatch();
     const [showCart, setShowCart] = useState(false);
-    const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page   
     const calculateTotalQuantity = () => { return CartItem ?
                     CartItem.reduce((total, item) => total + item.quantity, 0) : 0; };
     const plantsArray = [
@@ -213,6 +215,11 @@ function ProductList({ onHomeClick }) {
             ]
         }
     ];
+
+    const handleAddToCart = (product) => {
+        dispatch(addItem(product));
+    };
+
     const styleObj = {
         backgroundColor: '#4CAF50',
         color: '#fff!important',
@@ -275,9 +282,30 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
-                    dispatch(addItem(product));
-                    
-
+                    {/* 5. Map through the categories, then the plants */}
+                    {plantsArray.map((category, index) => (
+                        <div key={index}>
+                            <h1 className="category-title">{category.category}</h1>
+                            <div className="product-list">
+                                {category.plants.map((plant, plantIndex) => (
+                                    <div className="product-card" key={plantIndex}>
+                                        <img className="product-image" src={plant.image} alt={plant.name} />
+                                        <div className="product-title">{plant.name}</div>
+                                        <div className="product-description">{plant.description}</div>
+                                        <div className="product-cost">{plant.cost}</div>
+                                        
+                                        {/* 6. Add the Dispatch Trigger Here */}
+                                        <button 
+                                            className="product-button" 
+                                            onClick={() => handleAddToCart(plant)}
+                                        >
+                                            Add to Cart
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : (
                 <CartItem onContinueShopping={handleContinueShopping} />

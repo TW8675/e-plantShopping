@@ -38,12 +38,8 @@ const CartItem = ({ onContinueShopping }) => {
 
 
   const handleIncrement = (item) => {
-    if (item.quantity > 0) {
     dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
-    } else {
-        dispatch(addItem(item.name));
     }
-  };
 
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
@@ -65,12 +61,12 @@ const CartItem = ({ onContinueShopping }) => {
     //Multiply by quantity
     const subtotal = unitPrice * item.quantity;
     //Return the resulting value
-    return subtotal;
+    return subtotal.toFixed(2);
   };
 
   return (
     <div className="cart-container">
-      <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount()}</h2>
+      <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount(cart)}</h2>
       <div>
         {cart.map(item => (
           <div className="cart-item" key={item.name}>
@@ -98,7 +94,6 @@ const CartItem = ({ onContinueShopping }) => {
     </div>
   );
 };
-
 export default CartItem;
 
 
